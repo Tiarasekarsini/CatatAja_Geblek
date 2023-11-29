@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "346622253963",
+    "project_id": "geblek-38c14",
+    "storage_bucket": "geblek-38c14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346622253963:android:7ad67f455dbfc0f9cf2d8e",
+        "android_client_info": {
+          "package_name": "com.example.catataja_geblek"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnka6RXck92VF-16BLTnnCjeTQI_WBUA8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
