@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:calendar_appbar/calendar_appbar.dart';
 import 'package:catataja_geblek/controller/pemasukan_controller.dart';
 import 'package:catataja_geblek/view/add_pemasukan.dart';
+import 'package:catataja_geblek/view/edit_pemasukan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -107,12 +108,38 @@ class _HomePageState extends State<HomePage> {
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () async {
+                                Navigator.pop(context);
+                                pm.delPemasukan(data[index].id).then((value) {
+                                  setState(() {
+                                    pm.getPemasukan();
+                                  });
+                                });
+
+                                var snackBar = const SnackBar(
+                                    content: Text('Successfully Deleted'));
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
+                              },
                               icon: Icon(Icons.delete),
                               color: Colors.red,
                             ),
                             IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => EditPemasukan(
+                                                id: data[index]['id'],
+                                                amountOlder: data[index]
+                                                    ['amount'],
+                                                transactionDateOlder:
+                                                    data[index]
+                                                        ['transactionDate'],
+                                                descriptionOlder: data[index]
+                                                    ['description'],
+                                              )));
+                                },
                                 icon: Icon(Icons.edit),
                                 color: Colors.blue)
                           ],

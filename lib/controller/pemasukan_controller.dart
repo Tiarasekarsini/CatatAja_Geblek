@@ -43,7 +43,7 @@ class PemasukanController {
     return pemasukan.docs;
   }
 
-  ///membuat metode untuk mengubah data animal
+  ///membuat metode untuk mengubah data
   Future<void> editPemasukan(PemasukanModel pmModel) async {
     var document = pemasukanCollection.doc(pmModel.id);
 
@@ -55,5 +55,20 @@ class PemasukanController {
     );
 
     await document.update(animalModel.toMap());
+  }
+
+  Future<void> delPemasukan(String id) async {
+    var document = pemasukanCollection.doc(id);
+    var DocumentSnapshot = await document.get();
+
+    ///memeriksa apakah data yang akan dihapus ada/tidak
+    if (DocumentSnapshot.exists) {
+      /// proses delete jika data tersebut ada
+      await document.delete();
+
+      ///output apabila data yang akan dihapus tidak ditemukan
+    } else {
+      throw Exception('Failed to delete data');
+    }
   }
 }

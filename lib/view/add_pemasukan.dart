@@ -35,9 +35,9 @@ class _AddPemasukanState extends State<AddPemasukan> {
           key: formkey,
           child: Stack(
             children: [
-              Container(
-                margin: const EdgeInsets.only(top: 25, left: 25, right: 25),
-                alignment: Alignment.center,
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 25, right: 25, top: 25, bottom: 50),
                 child: ListTile(
                   title: Text("Pemasukkan",
                       style: GoogleFonts.montserrat(
@@ -58,205 +58,262 @@ class _AddPemasukanState extends State<AddPemasukan> {
                 ),
               ),
               Container(
-                height: 50,
-                margin: const EdgeInsets.only(top: 100, left: 10, right: 10),
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
+                  color: Color.fromARGB(255, 123, 17, 10),
+                  borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
                       spreadRadius: 7,
                       blurRadius: 10,
-                      offset: Offset(1, 1),
-                      color: Colors.grey.withOpacity(0.2),
+                      offset: const Offset(1, 1),
+                      color: Colors.black.withOpacity(0.2),
                     ),
                   ],
                 ),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    hintText: "Masukkan Jumlah",
-                    prefixIcon: const Icon(
-                      Icons.pets,
-                      color: Color.fromARGB(230, 252, 87, 158),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white, width: 1.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: const BorderSide(
-                        color: Colors.white,
-                        width: 1.0,
+                padding: const EdgeInsets.all(15),
+                height: 400,
+                width: 350,
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment
+                          .topLeft, // Menempatkan teks di pojok kiri atas
+                      child: Text(
+                        "Tambah Pemasukkan",
+                        style: GoogleFonts.montserrat(
+                          color: Colors.white, // Warna teks
+                          fontSize: 17, // Ukuran teks
+                          fontWeight: FontWeight.bold, // Ketebalan teks
+                        ),
                       ),
                     ),
-                  ),
-                  onChanged: (value) {
-                    amount = double.tryParse(value); // Parse string to double
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter the amount";
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Container(
-                height: 50,
-                margin: const EdgeInsets.only(top: 170, left: 10, right: 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      spreadRadius: 7,
-                      blurRadius: 10,
-                      offset: Offset(1, 1),
-                      color: Colors.grey.withOpacity(0.2),
+                    SizedBox(height: 25),
+                    Row(
+                      children: [
+                        // Nama label di sebelah kiri
+                        Text(
+                          'Jumlah',
+                          style: GoogleFonts.montserrat(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(width: 50),
+                        Expanded(
+                          child: Container(
+                            width: 200, // Atur lebar sesuai yang Anda inginkan
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintText: "Amount",
+                                // prefixIcon: const Icon(
+                                //   Icons.money_rounded,
+                                //   color: Color.fromARGB(230, 252, 87, 158),
+                                // ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 1.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                    color: Colors.white,
+                                    width: 1.0,
+                                  ),
+                                ),
+                              ),
+                              onChanged: (value) {
+                                amount = double.tryParse(
+                                    value); // Parse string to double
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please enter the amount";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
+                    SizedBox(height: 15),
+                    Row(
+                      children: [
+                        // Nama label di sebelah kiri
+                        Text(
+                          'Tanggal',
+                          style: GoogleFonts.montserrat(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(width: 48),
+                        Expanded(
+                          child: Container(
+                            width: 200, // Atur lebar sesuai yang Anda inginkan
+                            child: TextFormField(
+                              controller: date,
+                              decoration: InputDecoration(
+                                hintText: "Transaction Date",
+                                // prefixIcon: const Icon(
+                                //   Icons.calendar_month,
+                                //   color: Color.fromARGB(230, 252, 87, 158),
+                                // ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 1.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                    color: Colors.white,
+                                    width: 1.0,
+                                  ),
+                                ),
+                              ),
+                              readOnly: true,
+                              onTap: () async {
+                                DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2008),
+                                  lastDate: DateTime(2050),
+                                );
+                                if (pickedDate != null) {
+                                  String datepicked = DateFormat('dd-MM-yyyy')
+                                      .format(pickedDate);
+
+                                  setState(() {
+                                    date.text = datepicked;
+                                    transactionDate =
+                                        datepicked; // Menetapkan pickedDate langsung
+                                  });
+                                }
+                              },
+                              onChanged: (value) {
+                                // Remove onChanged for date, as it is not needed
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please enter the animal birth date";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 15),
+                    Row(
+                      children: [
+                        // Nama label di sebelah kiri
+                        Text(
+                          'Deskripsi',
+                          style: GoogleFonts.montserrat(
+                              color: Colors.white,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(width: 40),
+                        Expanded(
+                          child: Container(
+                            width: 200, // Atur lebar sesuai yang Anda inginkan
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                hintText: "Description",
+                                // prefixIcon: const Icon(
+                                //   Icons.description,
+                                //   color: Color.fromARGB(230, 252, 87, 158),
+                                // ),
+                                focusedBorder: const OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.white, width: 1.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(
+                                    color: Colors.white,
+                                    width: 1.0,
+                                  ),
+                                ),
+                              ),
+                              onChanged: (value) {
+                                description = value; // Parse string to double
+                              },
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please enter the amount";
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 50),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.only(left: 108),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red.shade500,
+                              minimumSize: Size(100, 45),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomePage()));
+                            },
+                            child: Text("Cancel"),
+                          ),
+                        ),
+                        SizedBox(width: 10), // Memberikan jarak antara tombol
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            minimumSize: Size(100, 45),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                          onPressed: () {
+                            if (formkey.currentState!.validate()) {
+                              PemasukanModel pm = PemasukanModel(
+                                amount: amount!,
+                                transactionDate: transactionDate!,
+                                description: description!,
+                              );
+                              pc.addPemasukan(pm);
+
+                              ///menampilkan pesan apabila isian sudah sesuai
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text('Data berhasil ditambahkan')));
+
+                              ///mengalihkan ke halaman AnimalData
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomePage()),
+                              );
+                            }
+                          },
+                          icon: Icon(Icons.save,
+                              size: 20), // Ganti ikon sesuai kebutuhan
+                          label: Text("Save"), // Ganti teks sesuai kebutuhan
+                        ),
+                      ],
+                    )
                   ],
-                ),
-                child: TextFormField(
-                  controller: date,
-                  decoration: InputDecoration(
-                    hintText: "Enter the animal's birth date",
-                    prefixIcon: const Icon(
-                      Icons.calendar_today,
-                      color: Color.fromARGB(230, 252, 87, 158),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white, width: 1.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: const BorderSide(
-                        color: Colors.white,
-                        width: 1.0,
-                      ),
-                    ),
-                  ),
-                  readOnly: true,
-                  onTap: () async {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2008),
-                      lastDate: DateTime(2050),
-                    );
-                    if (pickedDate != null) {
-                      String datepicked =
-                          DateFormat('dd-MM-yyyy').format(pickedDate);
-
-                      setState(() {
-                        date.text = datepicked;
-                        transactionDate =
-                            datepicked; // Menetapkan pickedDate langsung
-                      });
-                    }
-                  },
-                  onChanged: (value) {
-                    // Remove onChanged for date, as it is not needed
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter the animal birth date";
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Container(
-                height: 50,
-                margin: const EdgeInsets.only(top: 240, left: 10, right: 10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      spreadRadius: 7,
-                      blurRadius: 10,
-                      offset: Offset(1, 1),
-                      color: Colors.grey.withOpacity(0.2),
-                    ),
-                  ],
-                ),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Masukkan Deskripsi",
-                    prefixIcon: const Icon(
-                      Icons.pets,
-                      color: Color.fromARGB(230, 252, 87, 158),
-                    ),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white, width: 1.0),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      borderSide: const BorderSide(
-                        color: Colors.white,
-                        width: 1.0,
-                      ),
-                    ),
-                  ),
-                  onChanged: (value) {
-                    description = value; // Parse string to double
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter the amount";
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.only(top: 520, left: 10, right: 10),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    minimumSize: Size(double.infinity, 50),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40)),
-                    textStyle: GoogleFonts.lato(
-                      fontSize: 18,
-                      color: Colors.white,
-                      letterSpacing: 3.5 / 100,
-                      height: 152 / 100,
-                    ),
-                  ),
-
-                  ///proses ketika pengguna menekan tombol save
-                  onPressed: () {
-                    ///memeriksa inputan dari pengguna
-                    if (formkey.currentState!.validate()) {
-                      PemasukanModel pm = PemasukanModel(
-                        amount: amount!,
-                        transactionDate: transactionDate!,
-                        description: description!,
-                      );
-                      pc.addPemasukan(pm);
-
-                      ///menampilkan pesan apabila isian sudah sesuai
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text(
-                              'Pawrents! Your data has been successfully added!')));
-
-                      ///mengalihkan ke halaman AnimalData
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                    }
-                  },
-                  child: Text(
-                    'Save',
-                    style: GoogleFonts.lato(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                 ),
               ),
             ],
