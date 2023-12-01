@@ -6,6 +6,7 @@ import 'package:catataja_geblek/view/add_pemasukan.dart';
 import 'package:catataja_geblek/view/edit_pemasukan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -48,17 +49,41 @@ class _HomePageState extends State<HomePage> {
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(top: 5),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const AddPemasukan(),
+              padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
+              child: Container(
+                child: Row(
+                  children: [
+                    Text(
+                      "Transaksi",
+                      style: GoogleFonts.montserrat(
+                          fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                  );
-                },
-                child: const Text('tambah'),
+                    SizedBox(width: 150),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        textStyle: GoogleFonts.montserrat(
+                            fontSize: 14, fontWeight: FontWeight.w600),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => AddPemasukan(),
+                        ));
+                        //     .then((value) {
+                        //   // calculateTotalPemasukan();
+                        //   setState(() {});
+                        // });
+                      },
+                      child: Text(
+                        "Tambah",
+                        style: GoogleFonts.montserrat(
+                            color: Colors.black, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -92,7 +117,7 @@ class _HomePageState extends State<HomePage> {
 
                     return Card(
                       margin:
-                          const EdgeInsets.only(right: 20, left: 20, top: 20),
+                          const EdgeInsets.only(right: 25, left: 25, top: 15),
                       elevation: 10,
                       child: ListTile(
                         title: Text(
@@ -104,26 +129,102 @@ class _HomePageState extends State<HomePage> {
                         subtitle: Text(
                           '$description', // Display description
                         ),
+                        leading: Container(
+                          child: Icon(
+                            Icons.download,
+                            color: Colors.green,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
                             IconButton(
-                              onPressed: () async {
-                                Navigator.pop(context);
-                                pm.delPemasukan(data[index].id).then((value) {
-                                  setState(() {
-                                    pm.getPemasukan();
-                                  });
-                                });
-
-                                var snackBar = const SnackBar(
-                                    content: Text('Successfully Deleted'));
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(snackBar);
-                              },
-                              icon: Icon(Icons.delete),
-                              color: Colors.red,
-                            ),
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        15.0)),
+                                            content: Text(
+                                              'Anda yakin ingin menghapus data ini?',
+                                              style: GoogleFonts.montserrat(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                  style: TextButton.styleFrom(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          15.0)),
+                                                      backgroundColor:
+                                                          Colors.white),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text(
+                                                    'Tidak',
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color: Colors.blue),
+                                                  )),
+                                              TextButton(
+                                                  style: TextButton.styleFrom(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          15.0)),
+                                                      backgroundColor:
+                                                          Colors.blue),
+                                                  onPressed: () async {
+                                                    Navigator.pop(context);
+                                                    pm
+                                                        .delPemasukan(
+                                                            data[index].id)
+                                                        .then((value) {
+                                                      setState(() {
+                                                        pm.getPemasukan();
+                                                      });
+                                                    });
+                                                    var snackBar = const SnackBar(
+                                                        content: Text(
+                                                            'Data berhasil dihapus'));
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(snackBar);
+                                                  },
+                                                  child: Text(
+                                                    'Ya',
+                                                    style:
+                                                        GoogleFonts.montserrat(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.black),
+                                                  )),
+                                            ]);
+                                      });
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                )),
                             IconButton(
                                 onPressed: () {
                                   Navigator.push(

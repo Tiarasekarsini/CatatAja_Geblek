@@ -42,14 +42,14 @@ class _editPemasukanState extends State<EditPemasukan> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        // padding: const EdgeInsets.all(20),
         child: Form(
           key: formkey,
-          child: Stack(
+          child: Column(
             children: [
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 25, right: 25, top: 25, bottom: 50),
+                    left: 25, right: 25, top: 40, bottom: 40),
                 child: ListTile(
                   title: Text("Pemasukkan",
                       style: GoogleFonts.montserrat(
@@ -117,11 +117,9 @@ class _editPemasukanState extends State<EditPemasukan> {
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
                                 hintText: "Amount",
-                                // prefixIcon: const Icon(
-                                //   Icons.money_rounded,
-                                //   color: Color.fromARGB(230, 252, 87, 158),
-                                // ),
                                 focusedBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Colors.white, width: 1.0),
@@ -168,11 +166,9 @@ class _editPemasukanState extends State<EditPemasukan> {
                             child: TextFormField(
                               // controller: date,
                               decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
                                 hintText: "Transaction Date",
-                                // prefixIcon: const Icon(
-                                //   Icons.calendar_month,
-                                //   color: Color.fromARGB(230, 252, 87, 158),
-                                // ),
                                 focusedBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Colors.white, width: 1.0),
@@ -235,11 +231,9 @@ class _editPemasukanState extends State<EditPemasukan> {
                             width: 200, // Atur lebar sesuai yang Anda inginkan
                             child: TextFormField(
                               decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
                                 hintText: "Description",
-                                // prefixIcon: const Icon(
-                                //   Icons.description,
-                                //   color: Color.fromARGB(230, 252, 87, 158),
-                                // ),
                                 focusedBorder: const OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Colors.white, width: 1.0),
@@ -272,7 +266,7 @@ class _editPemasukanState extends State<EditPemasukan> {
                     Row(
                       children: [
                         Container(
-                          padding: const EdgeInsets.only(left: 108),
+                          padding: const EdgeInsets.only(left: 90),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red.shade500,
@@ -287,7 +281,10 @@ class _editPemasukanState extends State<EditPemasukan> {
                                   MaterialPageRoute(
                                       builder: (context) => HomePage()));
                             },
-                            child: Text("Cancel"),
+                            child: Text("Batal",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold)),
                           ),
                         ),
                         SizedBox(width: 10), // Memberikan jarak antara tombol
@@ -325,8 +322,14 @@ class _editPemasukanState extends State<EditPemasukan> {
                             }
                           },
                           icon: Icon(Icons.save,
+                              color: Colors.black,
                               size: 20), // Ganti ikon sesuai kebutuhan
-                          label: Text("Save"), // Ganti teks sesuai kebutuhan
+                          label: Text(
+                            "Simpan",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ), // Ganti teks sesuai kebutuhan
                         ),
                       ],
                     )

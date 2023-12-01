@@ -47,14 +47,14 @@ class PemasukanController {
   Future<void> editPemasukan(PemasukanModel pmModel) async {
     var document = pemasukanCollection.doc(pmModel.id);
 
-    final PemasukanModel animalModel = PemasukanModel(
+    final PemasukanModel pemasukanModel = PemasukanModel(
       id: pmModel.id,
       amount: pmModel.amount,
       transactionDate: pmModel.transactionDate,
       description: pmModel.description,
     );
 
-    await document.update(animalModel.toMap());
+    await document.update(pemasukanModel.toMap());
   }
 
   Future<void> delPemasukan(String id) async {
