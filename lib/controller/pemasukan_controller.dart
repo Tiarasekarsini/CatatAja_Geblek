@@ -10,32 +10,39 @@ class PemasukanController {
   final StreamController<List<DocumentSnapshot>> streamController =
       StreamController<List<DocumentSnapshot>>.broadcast();
 
+  final StreamController<double> totalPendapatanController =
+      StreamController<double>.broadcast();
+
   Stream<List<DocumentSnapshot>> get stream => streamController.stream;
+  Stream<double> get totalPendapatanStream => totalPendapatanController.stream;
 
-  ///membuat method untuk menambahkan data pemasukan
+  StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _subscription;
+
+  void initPendapatanListener() {
+    _subscription = pemasukanCollection.snapshots().listen((querySnapshot) {
+      _hitungTotalPemasukan();
+    });
+  }
+
+  void cancelPendapatanListener() {
+    _subscription?.cancel();
+  }
+
   Future<void> addPemasukan(PemasukanModel pmModel) async {
-    ///mengubah objek AnimalModel menjadi Map
     final pemasukan = pmModel.toMap();
-
-    ///metode untuk menambahkan data ke collection dan mengembalikan nilai ref dokumen
     final DocumentReference docRef = await pemasukanCollection.add(pemasukan);
-
     final String docId = docRef.id;
 
-    ///membuat objek untuk menjaga data yang telah disimpan di Firestore
     final PemasukanModel pemasukanModel = PemasukanModel(
       id: docId,
       amount: pmModel.amount,
       transactionDate: pmModel.transactionDate,
       description: pmModel.description,
-      // createdAt: pmModel.createdAt,
-      // updatedAt: pmModel.updatedAt,
     );
 
     await docRef.update(pemasukanModel.toMap());
   }
 
-  ///membuat metode untuk mengambil/menampilkan data yang tersimpan di firestore
   Future getPemasukan() async {
     final pemasukan =
         await pemasukanCollection.orderBy('transactionDate').get();
@@ -43,7 +50,6 @@ class PemasukanController {
     return pemasukan.docs;
   }
 
-  ///membuat metode untuk mengubah data
   Future<void> editPemasukan(PemasukanModel pmModel) async {
     var document = pemasukanCollection.doc(pmModel.id);
 
@@ -61,14 +67,35 @@ class PemasukanController {
     var document = pemasukanCollection.doc(id);
     var DocumentSnapshot = await document.get();
 
-    ///memeriksa apakah data yang akan dihapus ada/tidak
     if (DocumentSnapshot.exists) {
-      /// proses delete jika data tersebut ada
       await document.delete();
-
-      ///output apabila data yang akan dihapus tidak ditemukan
     } else {
       throw Exception('Failed to delete data');
     }
+  }
+
+  Future<String> getTotalPendapatan() async {
+    try {
+      final pemasukan = await pemasukanCollection.get();
+      double total = 0;
+
+      pemasukan.docs.forEach((doc) {
+        PemasukanModel pesananModel =
+            PemasukanModel.fromMap(doc.data() as Map<String, dynamic>);
+        double harga = pesananModel.amount ?? 0;
+        total += harga;
+      });
+
+      return total.toStringAsFixed(2);
+    } catch (e) {
+      print('Error while getting total pendapatan: $e');
+      return '0';
+    }
+  }
+
+  void _hitungTotalPemasukan() {
+    getTotalPendapatan().then((value) {
+      totalPendapatanController.sink.add(double.parse(value));
+    });
   }
 }

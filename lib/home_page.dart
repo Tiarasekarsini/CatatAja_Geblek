@@ -19,14 +19,32 @@ class _HomePageState extends State<HomePage> {
   var pm = PemasukanController();
   DateTime? selectedDate;
   Random random = Random();
+  double totalPendapatan = 0;
 
   @override
   void initState() {
+    super.initState();
     setState(() {
       selectedDate = DateTime.now();
-      pm.getPemasukan();
+      pm.getPemasukan().then((_) {
+        _hitungTotalPemasukan();
+        pm.initPendapatanListener();
+      });
     });
-    super.initState();
+  }
+
+  @override
+  void dispose() {
+    pm.cancelPendapatanListener();
+    super.dispose();
+  }
+
+  void _hitungTotalPemasukan() {
+    pm.getTotalPendapatan().then((value) {
+      setState(() {
+        totalPendapatan = double.parse(value);
+      });
+    });
   }
 
   @override
@@ -47,6 +65,46 @@ class _HomePageState extends State<HomePage> {
       ),
       body: CustomScrollView(
         slivers: [
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 25, right: 25, top: 10),
+              child: Card(
+                elevation: 10,
+                child: ListTile(
+                  title: Text(
+                    "Pemasukkan",
+                    style: GoogleFonts.montserrat(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: StreamBuilder<double>(
+                    stream: pm.totalPendapatanStream,
+                    initialData: 0,
+                    builder: (context, snapshot) {
+                      return Text(
+                        "Rp. ${snapshot.data}",
+                        style: GoogleFonts.montserrat(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    },
+                  ),
+                  leading: Container(
+                    child: Icon(
+                      Icons.download,
+                      color: Colors.green,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
@@ -257,4 +315,13 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+String removeTrailingZeros(String amountString) {
+  if (amountString.contains('.')) {
+    amountString = amountString
+        .replaceAll(RegExp(r"0*$"), "")
+        .replaceAll(RegExp(r"\.$"), "");
+  }
+  return amountString;
 }
