@@ -177,7 +177,7 @@ class _AddPemasukanState extends State<AddPemasukan> {
                                   lastDate: DateTime(2050),
                                 );
                                 if (pickedDate != null) {
-                                  String datepicked = DateFormat('dd-MM-yyyy')
+                                  String datepicked = DateFormat('dd-MMMM-yyyy')
                                       .format(pickedDate);
 
                                   setState(() {

@@ -18,13 +18,13 @@ class PemasukanController {
 
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _subscription;
 
-  void initPendapatanListener() {
+  void initPemasukanListener() {
     _subscription = pemasukanCollection.snapshots().listen((querySnapshot) {
       _hitungTotalPemasukan();
     });
   }
 
-  void cancelPendapatanListener() {
+  void cancelPemasukanListener() {
     _subscription?.cancel();
   }
 
@@ -43,12 +43,26 @@ class PemasukanController {
     await docRef.update(pemasukanModel.toMap());
   }
 
-  Future getPemasukan() async {
-    final pemasukan =
-        await pemasukanCollection.orderBy('transactionDate').get();
+  Future getPemasukan(DateTime selectedDate) async {
+    final pemasukan = await pemasukanCollection
+        .where('transactionDate', isEqualTo: selectedDate)
+        .get();
     streamController.sink.add(pemasukan.docs);
     return pemasukan.docs;
   }
+
+  // Future getPemasukan(DateTime selectedDate) async {
+  //   final pemasukan = await pemasukanCollection
+  //       .where('transactionDate', isGreaterThanOrEqualTo: selectedDate)
+  //       .where('transactionDate',
+  //           isLessThan: selectedDate.add(Duration(days: 1)))
+  //       .orderBy('transactionDate')
+  //       .get();
+
+  //   print('Pemasukan Data: ${pemasukan.docs}');
+  //   streamController.sink.add(pemasukan.docs);
+  //   return pemasukan.docs;
+  // }
 
   Future<void> editPemasukan(PemasukanModel pmModel) async {
     var document = pemasukanCollection.doc(pmModel.id);
@@ -74,9 +88,10 @@ class PemasukanController {
     }
   }
 
-  Future<String> getTotalPendapatan() async {
+  Future<String> getTotalPemasukan() async {
     try {
-      final pemasukan = await pemasukanCollection.get();
+      final pemasukan =
+          await pemasukanCollection.where('transactionDate').get();
       double total = 0;
 
       pemasukan.docs.forEach((doc) {
@@ -94,8 +109,9 @@ class PemasukanController {
   }
 
   void _hitungTotalPemasukan() {
-    getTotalPendapatan().then((value) {
-      totalPendapatanController.sink.add(double.parse(value));
+    getTotalPemasukan().then((value) {
+      double total = double.parse(value);
+      totalPendapatanController.sink.add(total);
     });
   }
 }

@@ -7,6 +7,7 @@ import 'package:catataja_geblek/view/edit_pemasukan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart'; // Import DateFormat
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,7 +18,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var pm = PemasukanController();
-  DateTime? selectedDate;
+  DateTime selectedDate = DateTime.now();
+  DateTime filterDate = DateTime.now();
   Random random = Random();
   double totalPendapatan = 0;
 
@@ -25,25 +27,56 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     setState(() {
-      selectedDate = DateTime.now();
-      pm.getPemasukan().then((_) {
+      selectedDate = filterDate;
+      pm.getPemasukan(selectedDate).then((_) {
         _hitungTotalPemasukan();
-        pm.initPendapatanListener();
+        pm.initPemasukanListener();
       });
     });
   }
 
   @override
   void dispose() {
-    pm.cancelPendapatanListener();
+    pm.cancelPemasukanListener();
     super.dispose();
   }
 
   void _hitungTotalPemasukan() {
-    pm.getTotalPendapatan().then((value) {
+    pm.getTotalPemasukan().then((value) {
       setState(() {
         totalPendapatan = double.parse(value);
       });
+    });
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2010),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null && picked != selectedDate) {
+      print('Selected Date: $picked');
+
+      // Perform the asynchronous work outside setState
+      await pm.getPemasukan(picked);
+
+      // Update the widget state synchronously
+      setState(() {
+        selectedDate = picked;
+        filterDate = picked;
+      });
+    }
+  }
+
+  void filterByDate(DateTime date) {
+    /// Metode untuk memfilter laporan berdasarkan tanggal
+    setState(() {
+      filterDate = date;
+
+      /// Memperbarui tanggal filter laporan
     });
   }
 
@@ -55,7 +88,7 @@ class _HomePageState extends State<HomePage> {
         backButton: false,
         accent: Color.fromARGB(255, 123, 17, 10),
         locale: 'id',
-        onDateChanged: (value) => setState(() => selectedDate = value),
+        onDateChanged: (value) => _selectDate(context),
         lastDate: DateTime.now(),
         events: List.generate(
           100,
@@ -145,8 +178,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          StreamBuilder<List<DocumentSnapshot>>(
-            stream: pm.stream,
+          StreamBuilder<QuerySnapshot>(
+            stream:
+                FirebaseFirestore.instance.collection('pemasukan').snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return SliverToBoxAdapter(
@@ -156,7 +190,14 @@ class _HomePageState extends State<HomePage> {
                 );
               }
 
-              final List<DocumentSnapshot> data = snapshot.data!;
+              final List<DocumentSnapshot> data =
+                  snapshot.data!.docs.where((doc) {
+                DateTime tanggalPemasukan =
+                    DateFormat('dd-MMMM-yyyy').parse(doc['transactionDate']);
+                return DateFormat('yyyy-MM-dd').format(tanggalPemasukan) ==
+                    DateFormat('yyyy-MM-dd').format(selectedDate);
+              }).toList();
+
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
@@ -172,6 +213,8 @@ class _HomePageState extends State<HomePage> {
 
                     String description =
                         data[index]['description'].toString(); // Add this line
+                    String transactionDate =
+                        data[index]['transactionDate'].toString();
 
                     return Card(
                       margin:
@@ -180,12 +223,25 @@ class _HomePageState extends State<HomePage> {
                       child: ListTile(
                         title: Text(
                           'Rp. $amountString', // Display amount
-                          style: TextStyle(
+                          style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        subtitle: Text(
-                          '$description', // Display description
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '$description', // Display description
+                              style: GoogleFonts.montserrat(
+                                fontSize: 14,
+                              ),
+                            ),
+                            Text(
+                              '$transactionDate', // Add your additional information here
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 12, fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
                         leading: Container(
                           child: Icon(
@@ -256,7 +312,8 @@ class _HomePageState extends State<HomePage> {
                                                             data[index].id)
                                                         .then((value) {
                                                       setState(() {
-                                                        pm.getPemasukan();
+                                                        pm.getPemasukan(
+                                                            selectedDate);
                                                       });
                                                     });
                                                     var snackBar = const SnackBar(
