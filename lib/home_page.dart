@@ -49,28 +49,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2010),
-      lastDate: DateTime(2100),
-    );
-
-    if (picked != null && picked != selectedDate) {
-      print('Selected Date: $picked');
-
-      // Perform the asynchronous work outside setState
-      await pm.getPemasukan(picked);
-
-      // Update the widget state synchronously
-      setState(() {
-        selectedDate = picked;
-        filterDate = picked;
-      });
-    }
-  }
-
   void filterByDate(DateTime date) {
     /// Metode untuk memfilter laporan berdasarkan tanggal
     setState(() {
@@ -88,7 +66,20 @@ class _HomePageState extends State<HomePage> {
         backButton: false,
         accent: Color.fromARGB(255, 123, 17, 10),
         locale: 'id',
-        onDateChanged: (value) => _selectDate(context),
+        onDateChanged: (value) async {
+          if (value != null && value != selectedDate) {
+            print('Selected Date: $value');
+
+            // Perform the asynchronous work outside setState
+            await pm.getPemasukan(value);
+
+            // Update the widget state synchronously inside setState
+            setState(() {
+              selectedDate = value;
+              filterDate = value;
+            });
+          }
+        },
         lastDate: DateTime.now(),
         events: List.generate(
           100,
