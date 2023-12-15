@@ -18,9 +18,9 @@ class PemasukanController {
 
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _subscription;
 
-  void initPemasukanListener() {
+  void initPemasukanListener(DateTime selectedMonth) {
     _subscription = pemasukanCollection.snapshots().listen((querySnapshot) {
-      _hitungTotalPemasukan();
+      _hitungTotalPemasukan(selectedMonth);
     });
   }
 
@@ -51,19 +51,6 @@ class PemasukanController {
     return pemasukan.docs;
   }
 
-  // Future getPemasukan(DateTime selectedDate) async {
-  //   final pemasukan = await pemasukanCollection
-  //       .where('transactionDate', isGreaterThanOrEqualTo: selectedDate)
-  //       .where('transactionDate',
-  //           isLessThan: selectedDate.add(Duration(days: 1)))
-  //       .orderBy('transactionDate')
-  //       .get();
-
-  //   print('Pemasukan Data: ${pemasukan.docs}');
-  //   streamController.sink.add(pemasukan.docs);
-  //   return pemasukan.docs;
-  // }
-
   Future<void> editPemasukan(PemasukanModel pmModel) async {
     var document = pemasukanCollection.doc(pmModel.id);
 
@@ -88,10 +75,11 @@ class PemasukanController {
     }
   }
 
-  Future<String> getTotalPemasukan() async {
+  Future<String> getTotalPemasukan(DateTime selectedMonth) async {
     try {
-      final pemasukan =
-          await pemasukanCollection.where('transactionDate').get();
+      final pemasukan = await pemasukanCollection
+          .where('transactionDate', isEqualTo: selectedMonth)
+          .get();
       double total = 0;
 
       pemasukan.docs.forEach((doc) {
@@ -108,10 +96,14 @@ class PemasukanController {
     }
   }
 
-  void _hitungTotalPemasukan() {
-    getTotalPemasukan().then((value) {
+  Future<void> _hitungTotalPemasukan(DateTime selectedMonth) async {
+    try {
+      String value = await getTotalPemasukan(selectedMonth);
       double total = double.parse(value);
       totalPendapatanController.sink.add(total);
-    });
+    } catch (e) {
+      print('Error while calculating total pendapatan: $e');
+      // Handle the error appropriately, e.g., show an error message.
+    }
   }
 }

@@ -19,7 +19,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var pm = PemasukanController();
   DateTime selectedDate = DateTime.now();
+  DateTime selectedMonth = DateTime.now();
   DateTime filterDate = DateTime.now();
+  DateTime filterMonth = DateTime.now();
   Random random = Random();
   double totalPendapatan = 0;
 
@@ -28,9 +30,11 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     setState(() {
       selectedDate = filterDate;
-      pm.getPemasukan(selectedDate).then((_) {
+      selectedMonth = filterMonth;
+      pm.getPemasukan(selectedDate);
+      pm.getTotalPemasukan(selectedMonth).then((_) {
         _hitungTotalPemasukan();
-        pm.initPemasukanListener();
+        pm.initPemasukanListener(selectedMonth);
       });
     });
   }
@@ -42,7 +46,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _hitungTotalPemasukan() {
-    pm.getTotalPemasukan().then((value) {
+    pm.getTotalPemasukan(selectedMonth).then((value) {
       setState(() {
         totalPendapatan = double.parse(value);
       });
@@ -50,9 +54,18 @@ class _HomePageState extends State<HomePage> {
   }
 
   void filterByDate(DateTime date) {
-    /// Metode untuk memfilter laporan berdasarkan tanggal
+    /// Metode untuk memfilter list pemasukan berdasarkan tanggal
     setState(() {
       filterDate = date;
+
+      /// Memperbarui tanggal filter laporan
+    });
+  }
+
+  void filterByMonth(DateTime monthYear) {
+    /// Metode untuk memfilter list pemasukan berdasarkan tanggal
+    setState(() {
+      filterMonth = monthYear;
 
       /// Memperbarui tanggal filter laporan
     });
@@ -79,6 +92,14 @@ class _HomePageState extends State<HomePage> {
               filterDate = value;
             });
           }
+          if (value != null && value != selectedMonth) {
+            await pm.getTotalPemasukan(value);
+
+            setState(() {
+              selectedMonth = value;
+              filterMonth = value;
+            });
+          }
         },
         lastDate: DateTime.now(),
         events: List.generate(
@@ -102,12 +123,32 @@ class _HomePageState extends State<HomePage> {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  subtitle: StreamBuilder<double>(
-                    stream: pm.totalPendapatanStream,
-                    initialData: 0,
+                  subtitle: StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection('pemasukan')
+                        .snapshots(),
                     builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Text(
+                          "Loading...",
+                          style: TextStyle(color: Colors.grey),
+                        );
+                      }
+
+                      final List<DocumentSnapshot> data =
+                          snapshot.data!.docs.where((doc) {
+                        DateTime tanggalPemasukan = DateFormat('dd-MMMM-yyyy')
+                            .parse(doc['transactionDate']);
+                        return tanggalPemasukan.month == selectedMonth.month;
+                      }).toList();
+
+                      double totalPemasukan = 0.0;
+                      for (var doc in data) {
+                        totalPemasukan += doc['amount'] ?? 0.0;
+                      }
+
                       return Text(
-                        "Rp. ${snapshot.data}",
+                        "Rp. ${totalPemasukan.toStringAsFixed(2)}",
                         style: GoogleFonts.montserrat(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
