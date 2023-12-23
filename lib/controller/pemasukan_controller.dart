@@ -4,6 +4,7 @@ import 'package:catataja_geblek/model/pemasukan_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PemasukanController {
+  /// deklarasi collection di firebase
   final pemasukanCollection =
       FirebaseFirestore.instance.collection('pemasukan');
 
@@ -18,6 +19,7 @@ class PemasukanController {
 
   StreamSubscription<QuerySnapshot<Map<String, dynamic>>>? _subscription;
 
+  /// membuat method agar total pemasukan auto terupdated
   void initPemasukanListener(DateTime selectedMonth) {
     _subscription = pemasukanCollection.snapshots().listen((querySnapshot) {
       _hitungTotalPemasukan(selectedMonth);
@@ -28,6 +30,7 @@ class PemasukanController {
     _subscription?.cancel();
   }
 
+  /// membuat method untuk menambahkan data pemasukan
   Future<void> addPemasukan(PemasukanModel pmModel) async {
     final pemasukan = pmModel.toMap();
     final DocumentReference docRef = await pemasukanCollection.add(pemasukan);
@@ -43,6 +46,7 @@ class PemasukanController {
     await docRef.update(pemasukanModel.toMap());
   }
 
+  /// membuat method untuk menampilkan data pemasukan berdasarkan tanggal yang dipilih oleh pengguna
   Future getPemasukan(DateTime selectedDate) async {
     final pemasukan = await pemasukanCollection
         .where('transactionDate', isEqualTo: selectedDate)
@@ -50,6 +54,8 @@ class PemasukanController {
     streamController.sink.add(pemasukan.docs);
     return pemasukan.docs;
   }
+
+  /// membuat method untuk mengedit data pemasukan
 
   Future<void> editPemasukan(PemasukanModel pmModel) async {
     var document = pemasukanCollection.doc(pmModel.id);
@@ -64,6 +70,7 @@ class PemasukanController {
     await document.update(pemasukanModel.toMap());
   }
 
+  /// membuat method untuk menghapus data pemasukan
   Future<void> delPemasukan(String id) async {
     var document = pemasukanCollection.doc(id);
     var DocumentSnapshot = await document.get();
@@ -75,6 +82,7 @@ class PemasukanController {
     }
   }
 
+  /// membuat method untuk menampilkan total pemasukan berdasarkan bulan yang dipilih oleh pengguna
   Future<String> getTotalPemasukan(DateTime selectedMonth) async {
     try {
       final pemasukan = await pemasukanCollection
@@ -103,7 +111,6 @@ class PemasukanController {
       totalPendapatanController.sink.add(total);
     } catch (e) {
       print('Error while calculating total pendapatan: $e');
-      // Handle the error appropriately, e.g., show an error message.
     }
   }
 }

@@ -3,7 +3,9 @@ import 'package:catataja_geblek/home_page.dart';
 import 'package:catataja_geblek/model/pemasukan_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart'; // Import DateFormat
+import 'package:intl/intl.dart';
+
+///Import DateFormat
 
 class AddPemasukan extends StatefulWidget {
   const AddPemasukan({Key? key}) : super(key: key);
@@ -30,7 +32,6 @@ class _AddPemasukanState extends State<AddPemasukan> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        // padding: const EdgeInsets.all(20),
         child: Form(
           key: formkey,
           child: Column(
@@ -45,8 +46,9 @@ class _AddPemasukanState extends State<AddPemasukan> {
                           fontWeight: FontWeight.w700,
                           color: Color.fromARGB(255, 123, 17, 10))),
                   leading: Column(
-                    mainAxisAlignment: MainAxisAlignment
-                        .center, // Untuk mengatur ikon ke tengah vertikal
+                    mainAxisAlignment: MainAxisAlignment.center,
+
+                    ///Untuk mengatur ikon ke tengah vertikal
                     children: [
                       Icon(
                         Icons.trending_up_outlined,
@@ -76,21 +78,28 @@ class _AddPemasukanState extends State<AddPemasukan> {
                 child: Column(
                   children: [
                     Align(
-                      alignment: Alignment
-                          .topLeft, // Menempatkan teks di pojok kiri atas
+                      alignment: Alignment.topLeft,
+
+                      ///Menempatkan teks di pojok kiri atas
                       child: Text(
                         "Tambah Pemasukkan",
                         style: GoogleFonts.montserrat(
-                          color: Colors.white, // Warna teks
-                          fontSize: 17, // Ukuran teks
-                          fontWeight: FontWeight.bold, // Ketebalan teks
+                          color: Colors.white,
+
+                          ///Warna teks
+                          fontSize: 17,
+
+                          ///Ukuran teks
+                          fontWeight: FontWeight.bold,
+
+                          ///Ketebalan teks
                         ),
                       ),
                     ),
                     SizedBox(height: 25),
                     Row(
                       children: [
-                        // Nama label di sebelah kiri
+                        ///Nama label di sebelah kiri
                         Text(
                           'Jumlah',
                           style: GoogleFonts.montserrat(
@@ -101,7 +110,9 @@ class _AddPemasukanState extends State<AddPemasukan> {
                         SizedBox(width: 50),
                         Expanded(
                           child: Container(
-                            width: 200, // Atur lebar sesuai yang Anda inginkan
+                            width: 200,
+
+                            ///Atur lebar sesuai diinginkan
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
@@ -121,8 +132,9 @@ class _AddPemasukanState extends State<AddPemasukan> {
                                 ),
                               ),
                               onChanged: (value) {
-                                amount = double.tryParse(
-                                    value); // Parse string to double
+                                amount = double.tryParse(value);
+
+                                ///Parse string to double
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -138,7 +150,7 @@ class _AddPemasukanState extends State<AddPemasukan> {
                     SizedBox(height: 15),
                     Row(
                       children: [
-                        // Nama label di sebelah kiri
+                        ///Nama label di sebelah kiri
                         Text(
                           'Tanggal',
                           style: GoogleFonts.montserrat(
@@ -149,7 +161,9 @@ class _AddPemasukanState extends State<AddPemasukan> {
                         SizedBox(width: 48),
                         Expanded(
                           child: Container(
-                            width: 200, // Atur lebar sesuai yang Anda inginkan
+                            width: 200,
+
+                            ///Atur lebar sesuai
                             child: TextFormField(
                               controller: date,
                               decoration: InputDecoration(
@@ -182,13 +196,14 @@ class _AddPemasukanState extends State<AddPemasukan> {
 
                                   setState(() {
                                     date.text = datepicked;
-                                    transactionDate =
-                                        datepicked; // Menetapkan pickedDate langsung
+                                    transactionDate = datepicked;
+
+                                    ///Menetapkan pickedDate langsung
                                   });
                                 }
                               },
                               onChanged: (value) {
-                                // Remove onChanged for date, as it is not needed
+                                ///Remove onChanged for date, as it is not needed
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -204,7 +219,7 @@ class _AddPemasukanState extends State<AddPemasukan> {
                     SizedBox(height: 15),
                     Row(
                       children: [
-                        // Nama label di sebelah kiri
+                        ///Nama label di sebelah kiri
                         Text(
                           'Deskripsi',
                           style: GoogleFonts.montserrat(
@@ -215,7 +230,9 @@ class _AddPemasukanState extends State<AddPemasukan> {
                         SizedBox(width: 40),
                         Expanded(
                           child: Container(
-                            width: 200, // Atur lebar sesuai yang Anda inginkan
+                            width: 200,
+
+                            ///Atur lebar sesuai yang diinginkan
                             child: TextFormField(
                               decoration: InputDecoration(
                                 fillColor: Colors.white,
@@ -234,7 +251,9 @@ class _AddPemasukanState extends State<AddPemasukan> {
                                 ),
                               ),
                               onChanged: (value) {
-                                description = value; // Parse string to double
+                                description = value;
+
+                                ///Parse string to double
                               },
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -247,7 +266,7 @@ class _AddPemasukanState extends State<AddPemasukan> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 50),
+                    SizedBox(height: 20),
                     Row(
                       children: [
                         Container(
@@ -272,7 +291,9 @@ class _AddPemasukanState extends State<AddPemasukan> {
                                     fontWeight: FontWeight.bold)),
                           ),
                         ),
-                        SizedBox(width: 10), // Memberikan jarak antara tombol
+                        SizedBox(width: 5),
+
+                        /// Memberikan jarak antara tombol
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
@@ -304,15 +325,17 @@ class _AddPemasukanState extends State<AddPemasukan> {
                               );
                             }
                           },
-                          icon: Icon(Icons.save,
-                              color: Colors.black,
-                              size: 20), // Ganti ikon sesuai kebutuhan
+                          icon: Icon(Icons.save, color: Colors.black, size: 20),
+
+                          ///Ganti ikon sesuai kebutuhan
                           label: Text(
                             "Simpan",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
-                          ), // Ganti teks sesuai kebutuhan
+                          ),
+
+                          ///Ganti teks sesuai kebutuhan
                         ),
                       ],
                     )

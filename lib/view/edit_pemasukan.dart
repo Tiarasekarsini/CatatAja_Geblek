@@ -42,7 +42,7 @@ class _editPemasukanState extends State<EditPemasukan> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        // padding: const EdgeInsets.all(20),
+        ///padding: const EdgeInsets.all(20),
         child: Form(
           key: formkey,
           child: Column(
@@ -57,8 +57,9 @@ class _editPemasukanState extends State<EditPemasukan> {
                           fontWeight: FontWeight.w700,
                           color: Color.fromARGB(255, 123, 17, 10))),
                   leading: Column(
-                    mainAxisAlignment: MainAxisAlignment
-                        .center, // Untuk mengatur ikon ke tengah vertikal
+                    mainAxisAlignment: MainAxisAlignment.center,
+
+                    ///Untuk mengatur ikon ke tengah vertikal
                     children: [
                       Icon(
                         Icons.trending_up_outlined,
@@ -88,21 +89,28 @@ class _editPemasukanState extends State<EditPemasukan> {
                 child: Column(
                   children: [
                     Align(
-                      alignment: Alignment
-                          .topLeft, // Menempatkan teks di pojok kiri atas
+                      alignment: Alignment.topLeft,
+
+                      ///Menempatkan teks di pojok kiri atas
                       child: Text(
                         "Tambah Pemasukkan",
                         style: GoogleFonts.montserrat(
-                          color: Colors.white, // Warna teks
-                          fontSize: 17, // Ukuran teks
-                          fontWeight: FontWeight.bold, // Ketebalan teks
+                          color: Colors.white,
+
+                          ///Warna teks
+                          fontSize: 17,
+
+                          ///Ukuran teks
+                          fontWeight: FontWeight.bold,
+
+                          ///Ketebalan teks
                         ),
                       ),
                     ),
                     SizedBox(height: 25),
                     Row(
                       children: [
-                        // Nama label di sebelah kiri
+                        ///Nama label di sebelah kiri
                         Text(
                           'Jumlah',
                           style: GoogleFonts.montserrat(
@@ -113,7 +121,9 @@ class _editPemasukanState extends State<EditPemasukan> {
                         SizedBox(width: 50),
                         Expanded(
                           child: Container(
-                            width: 200, // Atur lebar sesuai yang Anda inginkan
+                            width: 200,
+
+                            ///Atur lebar sesuai yang Anda inginkan
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
@@ -133,8 +143,9 @@ class _editPemasukanState extends State<EditPemasukan> {
                                 ),
                               ),
                               onChanged: (value) {
-                                amountNewer = double.tryParse(
-                                    value); // Parse string to double
+                                amountNewer = double.tryParse(value);
+
+                                ///Parse string to double
                               },
                               initialValue: widget.amountOlder.toString(),
                               validator: (value) {
@@ -151,7 +162,7 @@ class _editPemasukanState extends State<EditPemasukan> {
                     SizedBox(height: 15),
                     Row(
                       children: [
-                        // Nama label di sebelah kiri
+                        ///Nama label di sebelah kiri
                         Text(
                           'Tanggal',
                           style: GoogleFonts.montserrat(
@@ -162,9 +173,11 @@ class _editPemasukanState extends State<EditPemasukan> {
                         SizedBox(width: 48),
                         Expanded(
                           child: Container(
-                            width: 200, // Atur lebar sesuai yang Anda inginkan
+                            width: 200,
+
+                            ///Atur lebar sesuai yang Anda inginkan
                             child: TextFormField(
-                              // controller: date,
+                              ///controller: date,
                               decoration: InputDecoration(
                                 fillColor: Colors.white,
                                 filled: true,
@@ -217,7 +230,7 @@ class _editPemasukanState extends State<EditPemasukan> {
                     SizedBox(height: 15),
                     Row(
                       children: [
-                        // Nama label di sebelah kiri
+                        ///Nama label di sebelah kiri
                         Text(
                           'Deskripsi',
                           style: GoogleFonts.montserrat(
@@ -228,7 +241,9 @@ class _editPemasukanState extends State<EditPemasukan> {
                         SizedBox(width: 40),
                         Expanded(
                           child: Container(
-                            width: 200, // Atur lebar sesuai yang Anda inginkan
+                            width: 200,
+
+                            ///Atur lebar sesuai yang Anda inginkan
                             child: TextFormField(
                               decoration: InputDecoration(
                                 fillColor: Colors.white,
@@ -247,8 +262,9 @@ class _editPemasukanState extends State<EditPemasukan> {
                                 ),
                               ),
                               onChanged: (value) {
-                                descriptionNewer =
-                                    value; // Parse string to double
+                                descriptionNewer = value;
+
+                                ///Parse string to double
                               },
                               initialValue: widget.descriptionOlder,
                               validator: (value) {
@@ -287,7 +303,9 @@ class _editPemasukanState extends State<EditPemasukan> {
                                     fontWeight: FontWeight.bold)),
                           ),
                         ),
-                        SizedBox(width: 10), // Memberikan jarak antara tombol
+                        SizedBox(width: 10),
+
+                        ///Memberikan jarak antara tombol
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
@@ -321,15 +339,17 @@ class _editPemasukanState extends State<EditPemasukan> {
                               );
                             }
                           },
-                          icon: Icon(Icons.save,
-                              color: Colors.black,
-                              size: 20), // Ganti ikon sesuai kebutuhan
+                          icon: Icon(Icons.save, color: Colors.black, size: 20),
+
+                          ///Ganti ikon sesuai kebutuhan
                           label: Text(
                             "Simpan",
                             style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
-                          ), // Ganti teks sesuai kebutuhan
+                          ),
+
+                          ///Ganti teks sesuai kebutuhan
                         ),
                       ],
                     )

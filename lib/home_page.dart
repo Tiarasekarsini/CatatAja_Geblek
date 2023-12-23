@@ -7,7 +7,9 @@ import 'package:catataja_geblek/view/edit_pemasukan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart'; // Import DateFormat
+import 'package:intl/intl.dart';
+
+///Import DateFormat
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -83,10 +85,10 @@ class _HomePageState extends State<HomePage> {
           if (value != null && value != selectedDate) {
             print('Selected Date: $value');
 
-            // Perform the asynchronous work outside setState
+            ///Perform the asynchronous work outside setState
             await pm.getPemasukan(value);
 
-            // Update the widget state synchronously inside setState
+            ///Update the widget state synchronously inside setState
             setState(() {
               selectedDate = value;
               filterDate = value;
@@ -181,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                       style: GoogleFonts.montserrat(
                           fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                    SizedBox(width: 150),
+                    SizedBox(width: 130),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
@@ -194,10 +196,11 @@ class _HomePageState extends State<HomePage> {
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => AddPemasukan(),
                         ));
-                        //     .then((value) {
-                        //   // calculateTotalPemasukan();
-                        //   setState(() {});
-                        // });
+
+                        ///    .then((value) {
+                        ///  ///calculateTotalPemasukan();
+                        ///  setState(() {});
+                        ///});
                       },
                       child: Text(
                         "Tambah",
@@ -233,18 +236,19 @@ class _HomePageState extends State<HomePage> {
               return SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) {
-                    // Convert amount to string before calling substring
+                    ///Convert amount to string before calling substring
                     String amountString = data[index]['amount'].toString();
 
-                    // Remove trailing zeros after the decimal point
+                    ///Remove trailing zeros after the decimal point
                     amountString = amountString.contains('.')
                         ? amountString
                             .replaceAll(RegExp(r"0*$"), "")
                             .replaceAll(RegExp(r"\.$"), "")
                         : amountString;
 
-                    String description =
-                        data[index]['description'].toString(); // Add this line
+                    String description = data[index]['description'].toString();
+
+                    ///Add this line
                     String transactionDate =
                         data[index]['transactionDate'].toString();
 
@@ -254,7 +258,9 @@ class _HomePageState extends State<HomePage> {
                       elevation: 10,
                       child: ListTile(
                         title: Text(
-                          'Rp. $amountString', // Display amount
+                          'Rp. $amountString',
+
+                          ///Display amount
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.bold,
                           ),
@@ -263,13 +269,17 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '$description', // Display description
+                              '$description',
+
+                              ///Display description
                               style: GoogleFonts.montserrat(
                                 fontSize: 14,
                               ),
                             ),
                             Text(
-                              '$transactionDate', // Add your additional information here
+                              '$transactionDate',
+
+                              ///Add your additional information here
                               style: GoogleFonts.montserrat(
                                   fontSize: 12, fontWeight: FontWeight.bold),
                             ),
